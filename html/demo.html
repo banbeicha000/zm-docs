@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+</head>
+<body>
+
+<script type="module">
+    import { demoObj } from "./demo.js"
+    window.onload = function () {
+
+        let params = new URL(document.location).searchParams
+        if(!params.get('type')) return console.warn('无法找到匹配的demo脚本')
+
+        let typeVal = params.get('type')
+        let renderObj = demoObj[typeVal]
+        if(typeof renderObj === 'object') {
+
+            if(Array.isArray(renderObj['exLink'])) {
+                renderObj['exLink'].forEach(item => {
+                    let newEl = null
+                    if(item.type === 'script') {
+                        newEl = document.createElement('script')
+                        newEl.src = item.url
+                    }else if(item.type === 'style') {
+                        newEl = document.createElement('link')
+                        newEl.href = item.url
+                        newEl.rel = 'stylesheet'
+                    }
+                    if(!newEl) return
+                    document.getElementsByTagName('head').item(0).append(newEl)
+                })
+            }
+
+            if(renderObj['dom']) {
+                let domEl = document.createElement('div')
+                domEl.innerHTML = demoObj[typeVal]['dom']
+                document.body.append(domEl)
+            }
+
+            if(renderObj['style']) {
+                let style = document.createElement('style')
+                style.innerHTML = renderObj['style']
+                document.getElementsByTagName('head').item(0).append(style)
+            }
+
+            if(renderObj['script']) {
+                let script = document.createElement('script')
+                script.innerHTML = renderObj['script']
+                document.body.append(script)
+            }
+
+        }
+    }
+</script>
+</body>
+</html>

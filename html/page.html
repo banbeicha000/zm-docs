@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<style>
+    :root {
+        --page: hsl(40 100% 98%);
+        --line: hsl(0 0% 0% / 0.1);
+        --cover: hsl(24 30% 14%);
+        --spine: hsl(10 50% 6%);
+        --gray-0: #f8f9fa;
+        --gray-6: #868e96;
+        --gray-8: #343a40;
+        --page-count: 20;
+        --page-scroll: 25;
+        --underline: rgba(64, 64, 64, 0.4);
+    }
+
+    *,
+    *:after,
+    *:before {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        width: 100vw;
+        overflow-x: hidden;
+        background: var(--gray-8);
+        height: calc(((var(--page-count) + 2) * var(--page-scroll)) * 1vh);
+    }
+    main {
+        position: fixed;
+        width: 60vmin;
+        aspect-ratio: 3 / 4;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /*perspective: 2500px;*/
+        /*transform-style: preserve-3d;*/
+    }
+    .book {
+        height: 100%;
+        width: 100%;
+        scale: 0.5;
+        transform-style: preserve-3d;
+        perspective: 2500px;
+        /*perspective-origin: -25% 50%;*/
+    }
+    .page {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+    .book__page:not(.book__cover) {
+        top: 3%;
+        left: 0;
+        width: 94%;
+        height: 94%;
+    }
+    .page__paper {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        transform-origin: 0 50%;
+        transform-style: preserve-3d;
+    }
+    .sticker {
+        height: 15%;
+        position: absolute;
+        bottom: 5%;
+        right: 5%;
+        transform: rotate(-25deg);
+    }
+    .page__side--front {
+        --rotation: 0;
+        --coefficient: 0;
+    }
+    .page__side--back {
+        --rotation: 180;
+        --coefficient: 2;
+    }
+    .page__side {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transform: rotateY(calc(var(--rotation)* 1deg)) translate3d(0, 0, calc((0.5* var(--coefficient))* 1px));
+        backface-visibility: hidden;
+        background: repeating-linear-gradient(
+                0deg,
+                transparent 0 1rem,
+                var(--underline) 1rem calc(1rem + 1px),
+                transparent calc(1rem + 1px)
+        )
+        0 1rem/100% 100% no-repeat,
+        var(--page);
+
+    }
+    /*.book__page:not(.book__cover) .page__side {*/
+    /*    background: repeating-linear-gradient(*/
+    /*            0deg,*/
+    /*            transparent 0 1rem,*/
+    /*            var(--underline) 1rem calc(1rem + 1px),*/
+    /*            transparent calc(1rem + 1px)*/
+    /*    )*/
+    /*    0 1rem/100% 100% no-repeat,*/
+    /*    var(--page);*/
+    /*}*/
+    .book__cover .page__side--front {
+        border-radius: 0 5% 5% 0;
+    }
+    .book__cover .page__side--back {
+        border-radius: 5% 0 0 5%;
+    }
+    .book__cover--front .page__side--back {
+        background: linear-gradient(var(--page), var(--page)) 100% 50% / 94% 94% no-repeat, var(--cover);
+    }
+    .book__cover--back .page__side--front {
+        background: linear-gradient(var(--page), var(--page)) 0% 50% / 94% 94% no-repeat, var(--cover);
+    }
+    .book__cover--front .page__side--front, .book__cover--back .page__side--back {
+        background: var(--cover);
+    }
+
+    .page__side--back .page__number {
+        left: 2%;
+    }
+    .page__side--front .page__number {
+        right: 2%;
+    }
+
+    .page__number {
+        font-family: monospace;
+        position: absolute;
+        bottom: 2%;
+        font-size: calc(var(--size) * 0.025);
+        color: hsl(0 0% 0% / 0.3);
+    }
+
+    .intro {
+        height: 100vh;
+    }
+    body > div[data-scroll-intro] {
+        height: clamp(20rem, 20vh, 300px);
+    }
+    body > div[data-scroll-trigger] {
+        height: clamp(20rem, 20vh, 300px);
+    }
+</style>
+<body>
+<main>
+  <div class="book">
+    <div class="page book__page book__cover book__cover--front" data-scroll-target="1" style="--page-index: 1;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <svg class="sticker" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 316 306">
+            <path d="M155 0c-37 0-63 8-85 30-6-6-21-7-29-7C22 23 6 38 6 56c1 24 9 34 24 40l-9 2-21 4 3 22c3 0 8 1 9 4 6 7 2 14 3 26 2 21 7 33 14 40 14 67 62 112 127 112 70 0 118-45 132-112 6-7 11-20 13-40 1-12-3-19 3-26 2-3 6-4 9-4l3-22-21-4-10-2c17-7 24-26 24-40 0-18-15-33-34-33-9 0-23 1-30 7-23-22-51-30-90-30z" fill="hsl(0, 0%, 96%)"></path>
+            <g transform="matrix(1.34105 0 0 1.34105 -43 -1047)">
+              <path d="M243 894c0 61-36 106-94 106-55 0-92-45-92-106s38-86 91-86 95 25 95 86z" fill="#803300"></path>
+              <path d="M212 958c0 20-29 39-63 39-35 0-61-19-61-39s26-33 61-33 63 13 63 33z" fill="#e9c6af"></path>
+              <path d="M181 932c0 7-19 24-30 24s-32-17-32-24c0-8 20-13 31-13 12 0 31 5 31 13z"></path>
+              <ellipse cx="68.3" cy="827.7" rx="23.8" ry="23.1" fill="#803300"></ellipse>
+              <path d="M85 826a17 16 0 00-17-14 17 16 0 00-16 16 17 16 0 0016 16 17 16 0 001 0l3-4a66 66 0 0111-12l2-2z" fill="#e9c6af"></path>
+              <ellipse ry="23.1" rx="23.8" cy="827.7" cx="-231.2" transform="scale(-1 1)" fill="#803300"></ellipse>
+              <path d="M215 826a17 16 0 0116-14 17 16 0 0117 16 17 16 0 01-17 16 17 16 0 01-1 0l-2-4a66 66 0 00-11-12l-2-2z" fill="#e9c6af"></path>
+              <path d="M148 815c-14 0-26 1-38 4v11a199 199 0 0180 1v-11c-13-3-27-5-42-5z" fill="red"></path>
+              <path d="M165 816a16 8 0 015 5 16 8 0 01-6 6l26 4v-11l-25-4z" fill="#e50000"></path>
+              <path d="M148 789c-43 0-76 20-83 64 12-11 28-19 45-23 0 0-2-12 10-16 15-4 19-4 28-4 10 0 15 0 30 4s12 17 12 17c18 5 32 11 45 22-8-46-43-64-87-64z" fill="#1a1a1a"></path>
+              <circle cx="97.2" cy="894.1" r="11.2" fill="#faa" fill-opacity=".6"></circle>
+              <circle cy="894.1" cx="201.9" r="11.2" fill="#faa" fill-opacity=".6"></circle>
+              <path d="M97 864a21 21 0 01-7 16 21 21 0 01-16 5M204 864a21 21 0 006 16 21 21 0 0016 5" fill="none" stroke="#e9afaf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+              <g>
+                <path d="M77 855c-6 0-13 0-23 2l-14 3 2 15 7 2c3 5 1 10 2 18 3 28 12 34 26 35 8 1 23 3 33-1s19-10 25-18c6-9 6-18 10-26 3-5 8-4 10 0 3 8 4 17 10 26 6 8 15 14 24 18 11 4 26 2 34 1 14-1 23-7 26-35 1-8-2-13 2-18l7-2 2-15-15-3c-15-3-23-2-34-2h-13l-25 4c-8 2-15 7-23 6-8 0-15-5-23-6l-25-4H77z"></path>
+                <path d="M85 860c-10 1-25 1-28 13-3 15-3 32 6 45 7 11 23 9 35 9 19-1 35-16 40-34 2-8 4-14 1-19-6-10-20-12-31-13l-23-1z" fill="#333"></path>
+                <path d="M56 864a4 2 0 01-4 2 4 2 0 01-4-2 4 2 0 014-1 4 2 0 014 1" fill="#b3b3b3"></path>
+                <path d="M215 860c10 1 24 1 28 13 3 15 3 32-6 45-7 11-23 9-35 9-19-1-35-16-40-34-2-8-4-14-1-19 6-10 20-12 31-13l23-1z" fill="#333"></path>
+                <path d="M244 864a4 2 0 004 2 4 2 0 004-2 4 2 0 00-4-1 4 2 0 00-4 1" fill="#b3b3b3"></path>
+                <path d="M101 861l-19 66h17l18-65-16-1zM89 860h-4l-3 1-18 59 6 5z" fill="#fff"></path>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="page__side page__side--back">
+          <div class="book__insert"></div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="2" style="--page-index: 2;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Pancake-sketch.svg" />
+          <div class="page__number">1</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Tcannon-sketch.svg" />
+          <div class="page__number">2</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="3" style="--page-index: 3;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Elon-sketch.svg" />
+          <div class="page__number">3</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Record-sketch.svg" />
+          <div class="page__number">4</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="4" style="--page-index: 4;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Cubes-sketch.svg" />
+          <div class="page__number">5</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Pokedex-sketch.svg" />
+          <div class="page__number">6</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="5" style="--page-index: 5;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Truck-sketch.svg" />
+          <div class="page__number">7</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Care-sketch.svg" />
+          <div class="page__number">8</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="6" style="--page-index: 6;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Moon-sketch.svg" />
+          <div class="page__number">9</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Newton-sketch.svg" />
+          <div class="page__number">10</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="7" style="--page-index: 7;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Launch-sketch.svg" />
+          <div class="page__number">11</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Gun-sketch.svg" />
+          <div class="page__number">12</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="8" style="--page-index: 8;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Kitkat-sketch.svg" />
+          <div class="page__number">13</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Fireflies-sketch.svg" />
+          <div class="page__number">14</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="9" style="--page-index: 9;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Matryoshka-sketch.svg" />
+          <div class="page__number">15</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Birthday-sketch.svg" />
+          <div class="page__number">16</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="10" style="--page-index: 10;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Train-sketch.svg" />
+          <div class="page__number">17</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Earth-sketch.svg" />
+          <div class="page__number">18</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page" data-scroll-target="11" style="--page-index: 11;">
+      <div class="page__paper">
+        <div class="page__side page__side--front">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Cloud-sketch.svg" />
+          <div class="page__number">19</div>
+        </div>
+        <div class="page__side page__side--back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/605876/Impossible-sketch.svg" />
+          <div class="page__number">20</div>
+        </div>
+      </div>
+    </div>
+    <div class="page book__page book__cover book__cover--back" data-scroll-target="12" style="--page-index: 12;">
+      <div class="page__paper">
+        <div class="page__side page__side--front"></div>
+        <div class="page__side page__side--back"></div>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="intro">
+  <h2>intro spacer</h2>
+</div>
+<div data-scroll-intro>
+  <h2>scale trigger</h2>
+</div>
+<div data-scroll-trigger="1">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="2">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="3">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="4">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="5">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="6">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="7">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="8">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="9">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="10">
+  <h2>page trigger</h2>
+</div>
+<div data-scroll-trigger="11">
+  <h2>page trigger</h2>
+</div>
+<!--<div data-scroll-trigger="12">-->
+<!--  <h2>page trigger</h2>-->
+<!--</div>-->
+
+<script>
+    const book = document.querySelector('.book')
+    // const intro = document.querySelector('body')
+    const intro = document.querySelector('[data-scroll-intro]')
+    const pages = [...document.querySelectorAll('[data-scroll-trigger]')]
+    const axis = 'block'
+
+    const introTimeline = new ViewTimeline({
+        subject: intro,
+        axis
+    })
+
+    const durationTime = 5
+    const durationTime2 = 11
+    book.animate(
+        [
+            { scale: 1 }
+        ],
+        {
+            timeline: introTimeline,
+            delay: 0,
+            endDelay: 25,
+            duration: durationTime,
+            fill: 'both'
+        }
+    )
+
+    const setupPage = (page, index) => {
+        const target = document.querySelector(
+            `[data-scroll-target="${page.getAttribute("data-scroll-trigger")}"]`
+        );
+        if(target) {
+            const viewTimeline = new ViewTimeline({
+                subject: page,
+                axis
+            });
+
+            if (index === 0) {
+                book.animate(
+                    [
+                        {
+                            translate: "50% 0"
+                        }
+                    ],
+                    {
+                        timeline: viewTimeline,
+                        // delay: { phase: "enter", percent: CSS.percent(0) },
+                        // endDelay: { phase: "enter", percent: CSS.percent(100) },
+                        delay: 0,
+                        endDelay: 15,
+                        duration: durationTime,
+                        fill: "both"
+                    }
+                );
+            }
+
+            target.animate(
+                [
+                    {
+                        transform: `translateZ(${(pages.length - index) * 2}px)`
+                    },
+                    {
+                        transform: `translateZ(${(pages.length - index) * 2}px)`,
+                        offset: 0.75
+                    },
+                    {
+                        transform: `translateZ(${(pages.length - index) * -1}px)`
+                    }
+                ],
+                {
+                    timeline: viewTimeline,
+                    // delay: { phase: "enter", percent: CSS.percent(0) },
+                    // endDelay: { phase: "enter", percent: CSS.percent(100) },
+                    delay: 0,
+                    endDelay: 20,
+                    duration: 5,
+                    fill: "both"
+                }
+            );
+            target.querySelector('.page__paper').animate(
+                [
+                    {
+                        transform: "rotateY(0deg)"
+                    },
+                    {
+                        transform: "rotateY(-180deg)"
+                    }
+                ],
+                {
+                    timeline: viewTimeline,
+                    // delay: { phase: "enter", percent: CSS.percent(0) },
+                    // endDelay: { phase: "enter", percent: CSS.percent(100) },
+                    delay: 0,
+                    endDelay: 50,
+                    duration: 20,
+                    fill: "both",
+                }
+            );
+        }
+
+    }
+
+    pages.forEach(setupPage)
+</script>
+</body>
+</html>
